@@ -11,8 +11,10 @@ var request = require('request'),
     debug   = require('request-debug'),
     util    = require('util'),
     moment  = require('moment'),
+    xml2js  = require('xml2js'),
     _       = require('underscore'),
     version = require('./package.json').version
+
 
 module.exports = QuickBooks
 
@@ -1746,6 +1748,13 @@ module.request = function(context, verb, options, entity, callback) {
       console.log('invoking endpoint: ' + url)
       console.log(entity || '')
       console.log(util.inspect(body, {showHidden: false, depth: null}));
+    }
+    var ctype = res.headers && res.headers['content-type'];
+    if (!err && ctype && ctype.indexOf('xml') !== -1) {
+      xml2js.parseString(body, function(_err, result) {
+        err = _err;
+        body = result;
+      })
     }
     if (callback) {
       callback(err, body, res)
