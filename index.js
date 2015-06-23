@@ -1748,7 +1748,7 @@ module.request = function(context, verb, options, entity, callback) {
       console.log(util.inspect(body, {showHidden: false, depth: null}));
     }
     if (callback) {
-      callback(err, body)
+      callback(err, body, res)
     } else {
       return
     }
